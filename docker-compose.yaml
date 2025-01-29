@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  api:
+    build:
+      context: ./src/BlogTopcon # Caminho para o diretório do Dockerfile
+      dockerfile: BlogTopcon.API/Dockerfile
+    ports:
+      - "5000:8080"  # Mapeando a porta 8080 do contêiner para a porta 5000 do host
+    environment:
+      - ConnectionStrings__PostDB=Host=postgres;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - postgres
+    # command: ["sh", "-c", "dotnet ef migrations add InitialCreate && dotnet ef database update && dotnet BlogTopcon.API.dll"]
+
+
+  postgres:
+    image: postgres:15
+    container_name: blogtopcon_postgres
+    restart: always
+    ports:
+      - "${POSTGRES_PORT}:5432" # Porta configurada no .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
