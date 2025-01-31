@@ -1,8 +1,8 @@
 // src/pages/PostEdit.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { PostDto } from '../types/PostDto';
-import axiosInstance from '../axiosInstance';
+import { PostDto } from '../../types/PostDto';
+import axiosInstance from '../../axiosInstance';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostEdit: React.FC = () => {
@@ -17,7 +17,7 @@ const PostEdit: React.FC = () => {
       const response = await axiosInstance.get<PostDto>(`${apiUrl}/Post/${id}`);
       setPost(response.data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      setError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado');
     }
   };
 
@@ -36,7 +36,7 @@ const PostEdit: React.FC = () => {
       await axiosInstance.put(`${apiUrl}/Post/${post.id}`, post);
       navigate('/post/list'); // Redireciona de volta para a tela inicial após salvar
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while saving the post');
+      setError(err instanceof Error ? err.message : 'Um erro ocorreu ao publicar o post');
     }
   };
 

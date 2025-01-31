@@ -40,7 +40,7 @@ const MenuLateral: React.FC<PropsToken> = ({ setToken }) => {
             </li>
             <li className="nav-item">
               <Link
-                to="/usuarios"
+                to="/usuario/list"
                 className={`nav-link ${selectedItem === 'usuarios' ? 'active' : ''}`}
                 onClick={() => handleSelectItem('usuarios')}
               >

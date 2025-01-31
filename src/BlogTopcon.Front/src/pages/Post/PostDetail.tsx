@@ -1,8 +1,8 @@
 // src/pages/PostDetail.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { PostDto } from '../types/PostDto';
-import axiosInstance from '../axiosInstance';
+import { PostDto } from '../../types/PostDto';
+import axiosInstance from '../../axiosInstance';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostDetail: React.FC = () => {
@@ -17,7 +17,7 @@ const PostDetail: React.FC = () => {
         const response = await axiosInstance.get<PostDto>(`${apiUrl}/Post/${id}`);
         setPost(response.data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+        setError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado');
       }
     };
   

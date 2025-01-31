@@ -1,8 +1,8 @@
 // src/pages/PostCreate.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PostDto } from '../types/PostDto';
-import axiosInstance from '../axiosInstance';
+import { PostDto } from '../../types/PostDto';
+import axiosInstance from '../../axiosInstance';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostCreate: React.FC = () => {
@@ -27,7 +27,7 @@ const PostCreate: React.FC = () => {
       await axiosInstance.post(`${apiUrl}/Post`, post);
       navigate('/post/list'); // Redireciona de volta para a tela inicial após salvar
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while saving the post');
+      setError(err instanceof Error ? err.message : 'Um erro ocorou ao salvar o post');
     }
   };
 

@@ -1,12 +1,9 @@
-﻿
-using BlogTopcon.Core.Entities;
-
-namespace BlogTopcon.API.DTOs
+﻿namespace BlogTopcon.API.DTOs.Post
 {
     public record PostDto
     {
         public PostDto() { }
-        public PostDto(Post post)
+        public PostDto(Core.Entities.Post post)
         {
             Id = post.Id;
             Title = post.Title;

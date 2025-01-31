@@ -1,8 +1,8 @@
 // src/pages/PostList.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Para redirecionamento
-import { PostDto } from '../types/PostDto';
-import axiosInstance from '../axiosInstance';
+import { PostDto } from '../../types/PostDto';
+import axiosInstance from '../../axiosInstance';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostList: React.FC = () => {
@@ -18,7 +18,7 @@ const PostList: React.FC = () => {
       const response = await axiosInstance.get<PostDto[]>(`${apiUrl}/Post`);
       setPosts(response.data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      setError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado');
     } finally {
       setLoading(false);
     }
@@ -30,7 +30,7 @@ const PostList: React.FC = () => {
       await axiosInstance.delete(`${apiUrl}/Post/${id}`);
       setPosts(posts.filter(post => post.id !== id)); // Remove o post da lista local
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while deleting the post');
+      setError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado ao deletar o post');
     }
   };
 

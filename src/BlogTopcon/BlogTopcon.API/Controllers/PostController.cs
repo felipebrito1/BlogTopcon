@@ -1,4 +1,4 @@
-using BlogTopcon.API.DTOs;
+using BlogTopcon.API.DTOs.Post;
 using BlogTopcon.Core.Entities;
 using BlogTopcon.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +11,7 @@ namespace BlogTopcon.API.Controllers
     [ApiController]
     [Authorize]
     [Route("api/post")]
-    public class PostController : ControllerBase
+    public class PostController : TopconBaseController
     {
         private readonly IPostService _postService;
 
@@ -24,13 +24,24 @@ namespace BlogTopcon.API.Controllers
         }
 
         // Retornar todos os posts
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDto>>> Get()
         {
             var posts = await _postService.GetAllAsync(GetUserId());
             var postsDtos = posts.Select(post => new PostDto(post));
             return Ok(postsDtos);
+        }
+
+        // Retornar um post específico
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PostDto>> GetById(Guid id)
+        {
+            var post = await _postService.GetAsync(id, GetUserId());
+
+            if (post == null)
+                return NotFound("Post não encontrado.");
+
+            return Ok(new PostDto(post));
         }
 
         // Incluir um novo post
@@ -46,18 +57,6 @@ namespace BlogTopcon.API.Controllers
             _logger.LogInformation("Novo post criado: {@Post}", postParaCriar);
 
             return CreatedAtAction(nameof(GetById), new { id = postParaCriar.Id }, new PostDto(postParaCriar));
-        }
-
-        // Retornar um post específico
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PostDto>> GetById(Guid id)
-        {
-            var post = await _postService.GetAsync(id, GetUserId());
-
-            if (post == null)
-                return NotFound("Post não encontrado.");
-
-            return Ok(new PostDto(post));
         }
 
         // Atualizar um post
@@ -90,11 +89,6 @@ namespace BlogTopcon.API.Controllers
             _logger.LogInformation("Post removido: {@PostId}", id);
 
             return NoContent();
-        }
-        private Guid GetUserId()
-        {
-            Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out Guid userId);
-            return userId;
         }
     }
 }

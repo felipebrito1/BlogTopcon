@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BlogTopcon.Core.Interfaces.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlogTopcon.Infra.Models
 {
-    public class Usuario : IdentityUser
+    public class Usuario : IdentityUser, IUsuario
     {
-        
+        public Usuario(string userName)
+        {
+            UserName = userName;
+            CreationDate = DateTimeOffset.UtcNow;
+        }
+        public DateTimeOffset CreationDate { get; set; }
+
+        public string? Name => UserName;
     }
 }

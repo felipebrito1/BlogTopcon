@@ -79,8 +79,11 @@ builder.Services.AddAuthentication(options =>
     });
 
 
-builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<JwtTokenService>();
 
 builder.Services.AddAuthorization();

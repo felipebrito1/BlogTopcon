@@ -16,7 +16,7 @@ const LoginAuth: React.FC = () => {
     try {
       setError('');
       setLoading(true);
-      const response = await axios.post(`${apiUrl}/auth/register`, { user, password });
+      const response = await axios.post(`${apiUrl}/usuario`, { user, password });
       if (response.status === 200) {
         setSuccess("Usuario criado com sucesso.")
       }

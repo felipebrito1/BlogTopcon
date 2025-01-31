@@ -2,14 +2,14 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React, { useState, useEffect  } from 'react';
 import MenuLateral from './components/MenuLateral';
-import PostList from './pages/PostList';
-import Usuario from './pages/Usuario';
-import PostDetail from './pages/PostDetail';
-import PostEdit from './pages/PostEdit';
-import PostCreate from './pages/PostCreate';
+import PostList from './pages/Post/PostList';
+import PostDetail from './pages/Post/PostDetail';
+import PostEdit from './pages/Post/PostEdit';
+import PostCreate from './pages/Post/PostCreate';
 import LoginAuth from './components/Login/LoginAuth';
 import Autenticacao from './components/Autenticacao';
 import LoginCreate from './components/Login/LoginCreate';
+import UsuarioList from './pages/Post/Usuario/UsuarioList';
 
 const App: React.FC = () => {
   const [token, setToken] = useState<string|null>(localStorage.getItem("authToken"));
@@ -33,7 +33,7 @@ const App: React.FC = () => {
                   <Route path="/post/edit/:id" element={<PostEdit />} />
                   <Route path="/post/detail/:id" element={<PostDetail />} />
                   <Route path="/post/create" element={<PostCreate />} />              
-                  <Route path="/usuarios" element={<Usuario />} />
+                  <Route path="/usuario/list" element={<UsuarioList />} />
                 </Route>
               </Routes>
           </div>

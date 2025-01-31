@@ -1,4 +1,5 @@
-﻿using BlogTopcon.Infra.Models;
+﻿using BlogTopcon.API.DTOs.Auth;
+using BlogTopcon.Infra.Models;
 using BlogTopcon.Infra.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest model)
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
     {
         var user = await _userManager.FindByNameAsync(model.User);
         if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
@@ -27,20 +28,5 @@ public class AuthController : ControllerBase
 
         var token = _jwtTokenService.GenerateToken(user);
         return Ok(new { token });
-    }
-
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest model)
-    {
-        var user = new Usuario { UserName = model.User };
-        var result = await _userManager.CreateAsync(user, model.Password);
-
-        if (!result.Succeeded)
-            return BadRequest(result.Errors);
-
-        return Ok(new { message = "Usuário registrado com sucesso" });
-    }
+    }    
 }
-
-public record LoginRequest(string User, string Password);
-public record RegisterRequest(string User, string Password);
