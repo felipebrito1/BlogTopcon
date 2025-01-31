@@ -1,32 +1,44 @@
 // src/App.tsx
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect  } from 'react';
 import MenuLateral from './components/MenuLateral';
 import PostList from './pages/PostList';
 import Usuario from './pages/Usuario';
 import PostDetail from './pages/PostDetail';
 import PostEdit from './pages/PostEdit';
 import PostCreate from './pages/PostCreate';
+import LoginAuth from './components/Login/LoginAuth';
+import Autenticacao from './components/Autenticacao';
+import LoginCreate from './components/Login/LoginCreate';
 
 const App: React.FC = () => {
+  const [token, setToken] = useState<string|null>(localStorage.getItem("authToken"));
+
+  useEffect(() => {
+    localStorage.setItem('authToken', token || "");
+  }, [token]); // Executa sempre que `token` mudar
+
   return (
     <Router>
-      <div className="d-flex">
-        {/* Menu lateral */}
-        <MenuLateral />
-        
-        {/* Conteúdo da página */}
-        <div className="content p-3">
-          <Routes>
-            <Route path="/post/list" element={<PostList />} />
-            <Route path="/usuarios" element={<Usuario />} />
-            <Route path="/post/edit/:id" element={<PostEdit />} />
-            <Route path="/post/detail/:id" element={<PostDetail />} />
-            <Route path="/post/create" element={<PostCreate />} />            
-          </Routes>
+        <div className="d-flex">
+          {/* Só exibe o MenuLateral se o token existir */}
+          {token && <MenuLateral token={token} setToken={setToken} />}
+          {/* Conteúdo principal */}
+          <div className="w-100">
+              <Routes>
+                <Route path="/login" element={<LoginAuth token={token} setToken={setToken} />} />
+                <Route path="/createLogin" element={<LoginCreate  />} />
+                <Route path="/" element={<Autenticacao token={token} setToken={setToken}/>}>
+                  <Route path="/post/list" element={<PostList />} />
+                  <Route path="/post/edit/:id" element={<PostEdit />} />
+                  <Route path="/post/detail/:id" element={<PostDetail />} />
+                  <Route path="/post/create" element={<PostCreate />} />              
+                  <Route path="/usuarios" element={<Usuario />} />
+                </Route>
+              </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
   );
-};
-
+}
 export default App;

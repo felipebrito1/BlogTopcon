@@ -1,8 +1,9 @@
 // src/pages/PostList.tsx
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Para redirecionamento
 import { PostDto } from '../types/PostDto';
+import axiosInstance from '../axiosInstance';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostList: React.FC = () => {
   // Estado para armazenar os posts
@@ -14,7 +15,7 @@ const PostList: React.FC = () => {
   // Função para buscar os posts da API
   const fetchPosts = async () => {
     try {
-      const response = await axios.get<PostDto[]>('https://localhost:44356/Post');
+      const response = await axiosInstance.get<PostDto[]>(`${apiUrl}/Post`);
       setPosts(response.data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
@@ -26,7 +27,7 @@ const PostList: React.FC = () => {
   // Função para excluir um post
   const deletePost = async (id: string) => {
     try {
-      await axios.delete(`https://localhost:44356/Post/${id}`);
+      await axiosInstance.delete(`${apiUrl}/Post/${id}`);
       setPosts(posts.filter(post => post.id !== id)); // Remove o post da lista local
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred while deleting the post');
@@ -56,12 +57,12 @@ const PostList: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="w-75">
       <button className="btn btn-primary" onClick={() => navigate('/post/create')}>
-        Adicionar Post
+        Criar Post
       </button>
       {posts.length === 0 ? (
-        <p>No posts available</p>
+        <p>Você ainda não possui nenhum post publicado</p>
       ) : (
         <table className="table">
           <thead>
@@ -77,11 +78,11 @@ const PostList: React.FC = () => {
               <tr key={post.id}>
                 <td>{post.title}</td>
                 <td>{post.content}</td>
-                <td>{post.creationDate}</td>
+                <td>{post.creationDateFormat}</td>
                 <td>
-                  <button className="btn btn-danger" onClick={() => deletePost(post.id!)}>Excluir</button>
-                  <button className="btn btn-warning" onClick={() => editPost(post.id!)}>Editar</button>
-                  <button className="btn btn-info" onClick={() => viewPost(post.id!)}>Visualizar</button>
+                  <i className="bi bi-trash text-danger" style={{ cursor: 'pointer' }} onClick={() => deletePost(post.id!)}></i>
+                  <i className="bi bi-pencil text-warning" style={{ cursor: 'pointer', marginLeft: '10px' }} onClick={() => editPost(post.id!)}></i>
+                  <i className="bi bi-eye text-info" style={{ cursor: 'pointer', marginLeft: '10px' }} onClick={() => viewPost(post.id!)}></i>
                 </td>
               </tr>
             ))}

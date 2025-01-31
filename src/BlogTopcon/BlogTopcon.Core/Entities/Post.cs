@@ -13,6 +13,12 @@ namespace BlogTopcon.Core.Entities
             Content = content;
             CreationDate = DateTimeOffset.UtcNow;
         }
+        public Post(Guid userId, string? title, string? content) : this(title, content)
+        {
+            Title = title;           Content = content;
+            CreationDate = DateTimeOffset.UtcNow;
+            UserId = userId;
+        }
 
         [Key]
         [Column("id")]
@@ -23,6 +29,8 @@ namespace BlogTopcon.Core.Entities
         public string? Content { get; private set; }
         [Column("creationdate")]
         public DateTimeOffset CreationDate { get; private set; }
+        [Column("userId")]
+        public Guid UserId { get; private set; }
         public void UpdateContent(string? content) => Content = content;
         public void UpdateTitle(string? title) => Title = title;
         public void Update(Post post)

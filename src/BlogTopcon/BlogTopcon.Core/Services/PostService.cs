@@ -15,24 +15,24 @@ namespace BlogTopcon.Core.Services
             await _postRepository.InsertAsync(post);
         }
 
-        public async Task<Post?> DeleteAsync(Guid postId)
+        public async Task<Post?> DeleteAsync(Guid postId, Guid userId)
         {
-            var postParaDeletar = await _postRepository.GetAsync(postId);
+            var postParaDeletar = await _postRepository.GetAsync(postId, userId);
             if (postParaDeletar == null)
                 return postParaDeletar;
 
-            await _postRepository.DeleteAsync(postParaDeletar.Id);
+            await _postRepository.DeleteAsync(postParaDeletar);
             return postParaDeletar;
         }
 
-        public async Task<Post?> GetAsync(Guid postId)
+        public async Task<Post?> GetAsync(Guid postId, Guid userId)
         {
-            return await _postRepository.GetAsync(postId);
+            return await _postRepository.GetAsync(postId, userId);
         }
 
-        public async Task<Post?> UpdateAsync(Guid postId, Post post)
+        public async Task<Post?> UpdateAsync(Guid postId, Guid userId, Post post)
         {
-            var postParaAtualizar = await _postRepository.GetAsync(postId);
+            var postParaAtualizar = await _postRepository.GetAsync(postId, userId);
             if (postParaAtualizar == null)
                 return postParaAtualizar;
 
@@ -43,9 +43,9 @@ namespace BlogTopcon.Core.Services
             return postParaAtualizar;
         }
 
-        public async Task<IEnumerable<Post>> GetAllAsync()
+        public async Task<IEnumerable<Post>> GetAllAsync(Guid userId)
         {
-            return await _postRepository.GetAllAsync();
+            return await _postRepository.GetAllAsync(userId);
         }
     }
 }

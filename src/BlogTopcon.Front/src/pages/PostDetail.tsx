@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PostDto } from '../types/PostDto';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostDetail: React.FC = () => {
     const { id } = useParams(); // Pega o id do post na URL
@@ -13,7 +14,7 @@ const PostDetail: React.FC = () => {
     // Função para buscar os dados do post a ser editado
     const fetchPost = async (id: string) => {
       try {
-        const response = await axios.get<PostDto>(`https://localhost:44356/Post/${id}`);
+        const response = await axiosInstance.get<PostDto>(`${apiUrl}/Post/${id}`);
         setPost(response.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unexpected error occurred');
@@ -33,15 +34,15 @@ const PostDetail: React.FC = () => {
     };
   
     if (!post) {
-      return <h2>Loading...</h2>;
+      return <h2>Carregando...</h2>;
     }
   
     if (error) {
-      return <h2>Error: {error}</h2>;
+      return <h2>Erro: {error}</h2>;
     }
   
     return (
-      <div>
+      <div className="w-50">
         <h1>Visualizar Post</h1>
         <form>
           <div className="mb-3">
@@ -78,7 +79,7 @@ const PostDetail: React.FC = () => {
               type="text"
               className="form-control"
               id="creationDate"
-              value={post.creationDate?.toString() || ''}
+              value={post.creationDateFormat || ''}
               disabled
             />
           </div>

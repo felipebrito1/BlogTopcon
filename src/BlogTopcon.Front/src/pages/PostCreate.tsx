@@ -1,15 +1,16 @@
 // src/pages/PostCreate.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { PostDto } from '../types/PostDto';
+import axiosInstance from '../axiosInstance';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostCreate: React.FC = () => {
   const [post, setPost] = useState<PostDto>({
     id: null,
     title: '',
     content: '',
-    creationDate: null,
+    creationDateFormat: null,
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +24,7 @@ const PostCreate: React.FC = () => {
     }
 
     try {
-      await axios.post('https://localhost:44356/Post', post);
+      await axiosInstance.post(`${apiUrl}/Post`, post);
       navigate('/post/list'); // Redireciona de volta para a tela inicial após salvar
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred while saving the post');
@@ -36,12 +37,12 @@ const PostCreate: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="w-50">
       <h1>Criar Post</h1>
       <form>
         <div className="mb-3">
           <label htmlFor="title" className="form-label">
-            Title
+            Título
           </label>
           <input
             type="text"
@@ -54,7 +55,7 @@ const PostCreate: React.FC = () => {
 
         <div className="mb-3">
           <label htmlFor="content" className="form-label">
-            Content
+            Conteúdo
           </label>
           <textarea
             className="form-control"
@@ -72,7 +73,7 @@ const PostCreate: React.FC = () => {
             Cancelar
           </button>
           <button type="button" className="btn btn-primary" onClick={savePost}>
-            Salvar
+            Publicar
           </button>
         </div>
       </form>

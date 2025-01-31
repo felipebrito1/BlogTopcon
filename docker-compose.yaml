@@ -1,6 +1,7 @@
 version: '3.9'
 services:
   api:
+    container_name: blogtopcon_api
     build:
       context: ./src/BlogTopcon # Caminho para o diretório do Dockerfile
       dockerfile: BlogTopcon.API/Dockerfile
@@ -11,8 +12,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - postgres
-    # command: ["sh", "-c", "dotnet ef migrations add InitialCreate && dotnet ef database update && dotnet BlogTopcon.API.dll"]
-
 
   postgres:
     image: postgres:15
@@ -26,6 +25,23 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  # frontend:
+  #   container_name: blogtopcon_frontend
+  #   build:
+  #     context: ./src/BlogTopcon.Front # Caminho para o projeto React
+  #     dockerfile: Dockerfile # Nome do Dockerfile do frontend
+  #   ports:
+  #     - "3000:80" # Porta do React no host para acessar no navegador
+  #   volumes:
+  #     - ./src/BlogTopcon.Front:/app # Sincroniza o código local com o contêiner
+  #     - /app/node_modules # Evita conflitos de dependências
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true # Para hot-reload funcionar corretamente no Docker
+  #   stdin_open: true
+  #   tty: true
+  #   depends_on:
+  #     - api # Aguarda a API estar disponível antes de subir o frontend
 
 volumes:
   postgres_data:

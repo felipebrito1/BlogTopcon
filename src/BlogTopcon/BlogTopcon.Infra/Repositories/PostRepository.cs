@@ -22,19 +22,18 @@ namespace BlogTopcon.Infra.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Post?> GetAsync(Guid postId)
+        public async Task<Post?> GetAsync(Guid postId, Guid userId)
         {
-            return await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId);
+            return await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId && post.UserId == userId);
         }
-        public async Task<IEnumerable<Post>> GetAllAsync()
+        public async Task<IEnumerable<Post>> GetAllAsync(Guid userId)
         {
-            return await _context.Posts.OrderByDescending(p => p.CreationDate).ToListAsync();
+            return await _context.Posts.Where(post => post.UserId == userId)
+                                       .OrderByDescending(p => p.CreationDate)
+                                       .ToListAsync();
         }
-
-        public async Task DeleteAsync(Guid postId)
+        public async Task DeleteAsync(Post post)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId);
-            if (post == null) return;
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
         }
