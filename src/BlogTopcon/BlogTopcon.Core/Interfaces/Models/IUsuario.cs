@@ -5,6 +5,7 @@
         public string Id { get; }
         public string? Name { get; }
         public DateTimeOffset CreationDate { get; }
+        public bool IsAdmin { get; }
 
     }
 }

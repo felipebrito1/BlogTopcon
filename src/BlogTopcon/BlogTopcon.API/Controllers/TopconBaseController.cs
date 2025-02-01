@@ -5,10 +5,10 @@ namespace BlogTopcon.API.Controllers
 {
     public class TopconBaseController : ControllerBase
     {
-        protected Guid GetUserId()
+        protected Guid GetUserAuthId()
         {
-            Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out Guid userId);
-            return userId;
+            Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out Guid userAuthId);
+            return userAuthId;
         }
     }
 }

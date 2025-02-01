@@ -10,9 +10,11 @@ namespace BlogTopcon.API.DTOs.Usuario
             Id = user.Id;
             Name = user.Name;
             CreationDateFormat = user.CreationDate.ToLocalTime().ToString("g");
+            IsAdminFormat = user.IsAdmin ? "Sim" : "Não";
         }
-        public string Id { get; set; } = "";
+        public string? Id { get; set; }
         public string? Name { get; set; }
         public string? CreationDateFormat { get; set; }
+        public string? IsAdminFormat { get; set; }
     }
 }

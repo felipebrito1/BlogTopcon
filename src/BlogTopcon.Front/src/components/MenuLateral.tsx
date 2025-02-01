@@ -6,7 +6,7 @@ import { PropsToken } from '../types/PropsToken';
 // Tipagem para os itens do menu
 type MenuItem = 'post' | 'usuarios';
 
-const MenuLateral: React.FC<PropsToken> = ({ setToken }) => {
+const MenuLateral: React.FC<PropsToken> = ({ setToken, isAdmin }) => {
   // Estado para armazenar a última opção selecionada
   const [selectedItem, setSelectedItem] = useState<MenuItem>(() => {
     // Lê do localStorage se houver, senão usa 'home' por padrão
@@ -38,15 +38,17 @@ const MenuLateral: React.FC<PropsToken> = ({ setToken }) => {
                 Posts
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                to="/usuario/list"
-                className={`nav-link ${selectedItem === 'usuarios' ? 'active' : ''}`}
-                onClick={() => handleSelectItem('usuarios')}
-              >
-                Usuários
-              </Link>
-            </li>
+            {isAdmin == "true" &&
+              <li className="nav-item">
+                <Link
+                  to="/usuario/list"
+                  className={`nav-link ${selectedItem === 'usuarios' ? 'active' : ''}`}
+                  onClick={() => handleSelectItem('usuarios')}
+                >
+                  Usuários
+                </Link>
+              </li>
+            }
           </ul>
           <div>
                 <button onClick={handleLogout}>Logout</button>

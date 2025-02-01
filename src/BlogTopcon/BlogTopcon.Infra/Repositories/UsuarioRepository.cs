@@ -13,15 +13,22 @@ namespace BlogTopcon.Infra.Repositories
 
         public async Task<IEnumerable<IUsuario>> GetAllAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.OrderByDescending(user => user.CreationDate).ToListAsync();
         }
-        public async Task DeleteAsync(string id)
+
+        public async Task<IUsuario?> GetAsync(string userId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
+            return await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
+        }
+
+        public async Task<IUsuario?> DeleteAsync(string userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
             if (user == null)
-                return;
+                return user;
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
+            return user;
         }
     }
 }

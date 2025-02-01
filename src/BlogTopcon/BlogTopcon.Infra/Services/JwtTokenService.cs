@@ -24,7 +24,9 @@ namespace BlogTopcon.Infra.Services
 
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier , user.Id)
+            new Claim(ClaimTypes.NameIdentifier , user.Id),
+            new Claim(ClaimTypes.Name , user.Name ?? ""),
+            new Claim("isAdmin" , user.IsAdmin.ToString().ToLower())
         };
 
             var token = new JwtSecurityToken(

@@ -11,7 +11,8 @@ services:
       - ConnectionStrings__PostDB=Host=postgres;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   postgres:
     image: postgres:15
@@ -25,6 +26,24 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+  db-init:
+    image: postgres:15
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_started
+    volumes:
+      - ./init-scripts:/init-scripts
+    command: ["sh", "-c", "sleep 10 && PGPASSWORD=${POSTGRES_PASSWORD} psql -h postgres -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /init-scripts/init.sql"]
+
+volumes:
+  postgres_data:
 
   # frontend:
   #   container_name: blogtopcon_frontend
@@ -43,5 +62,3 @@ services:
   #   depends_on:
   #     - api # Aguarda a API estar disponível antes de subir o frontend
 
-volumes:
-  postgres_data:

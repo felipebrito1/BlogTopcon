@@ -3,8 +3,6 @@ using BlogTopcon.Core.Entities;
 using BlogTopcon.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using System.Security.Claims;
 
 namespace BlogTopcon.API.Controllers
 {
@@ -27,7 +25,7 @@ namespace BlogTopcon.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDto>>> Get()
         {
-            var posts = await _postService.GetAllAsync(GetUserId());
+            var posts = await _postService.GetAllAsync(GetUserAuthId());
             var postsDtos = posts.Select(post => new PostDto(post));
             return Ok(postsDtos);
         }
@@ -36,7 +34,7 @@ namespace BlogTopcon.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PostDto>> GetById(Guid id)
         {
-            var post = await _postService.GetAsync(id, GetUserId());
+            var post = await _postService.GetAsync(id, GetUserAuthId());
 
             if (post == null)
                 return NotFound("Post não encontrado.");
@@ -52,7 +50,7 @@ namespace BlogTopcon.API.Controllers
                 return BadRequest("Título e conteúdo são obrigatórios.");
 
 
-            var postParaCriar = new Post(GetUserId(), newPost.Title, newPost.Content);
+            var postParaCriar = new Post(GetUserAuthId(), newPost.Title, newPost.Content);
             await _postService.CreateAsync(postParaCriar);
             _logger.LogInformation("Novo post criado: {@Post}", postParaCriar);
 
@@ -66,7 +64,7 @@ namespace BlogTopcon.API.Controllers
             if (updatedPost == null || string.IsNullOrWhiteSpace(updatedPost.Title) || string.IsNullOrWhiteSpace(updatedPost.Content))
                 return BadRequest("Título e conteúdo são obrigatórios.");
 
-            var postAtualizado = await _postService.UpdateAsync(id, GetUserId(), new Post(updatedPost.Title, updatedPost.Content));
+            var postAtualizado = await _postService.UpdateAsync(id, GetUserAuthId(), new Post(updatedPost.Title, updatedPost.Content));
             if (postAtualizado == null)
             {
                 return NotFound("Post não encontrado.");
@@ -81,7 +79,7 @@ namespace BlogTopcon.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var postDeletado = await _postService.DeleteAsync(id, GetUserId());
+            var postDeletado = await _postService.DeleteAsync(id, GetUserAuthId());
 
             if (postDeletado == null)
                 return NotFound("Post não encontrado.");

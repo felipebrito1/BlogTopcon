@@ -1,5 +1,4 @@
-﻿using BlogTopcon.Core.Entities;
-using BlogTopcon.Core.Interfaces.Models;
+﻿using BlogTopcon.Core.Interfaces.Models;
 using BlogTopcon.Core.Interfaces.Repositories;
 using BlogTopcon.Core.Interfaces.Services;
 
@@ -12,10 +11,26 @@ namespace BlogTopcon.Core.Services
         public UsuarioService(IUsuarioRepository usuarioRepository) => _usuarioRepository = usuarioRepository;
 
 
-        public async Task<IEnumerable<IUsuario>> GetAllAsync(Guid userId)
+        public async Task<IEnumerable<IUsuario>?> GetAllAsync(Guid userAuthId)
         {
-            //TODO: Verificar se o userId é de um admin
+            if (!await UserIsAdminAsync(userAuthId))
+                return [];
+
             return await _usuarioRepository.GetAllAsync();
+        }
+
+
+        public async Task<IUsuario?> DeleteAsync(string userId, Guid userAuthId)
+        {
+            if (!await UserIsAdminAsync(userAuthId))
+                return null;
+
+            return await _usuarioRepository.DeleteAsync(userId);
+        }
+        private async Task<bool> UserIsAdminAsync(Guid userId)
+        {
+            var user = await _usuarioRepository.GetAsync(userId.ToString());
+            return user?.IsAdmin ?? false;
         }
     }
 }
