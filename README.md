@@ -69,13 +69,13 @@ docker-compose up -d
 
 ## 📌 Débitos técnicos
 - Estudar arquiteturas de React TS
-- Contextos e Usuario/Login ficaram muito confusos no front e back
+- Contextos de Usuario/Login ficaram muito confusos no front e back
 - Conceitos de SOLID no front
 - Estilização dos componentes
 - Sem tratamentos de erros nenhum (Back e Front)
 - Testes automatizados
 - Tratamento para não exclusão do próprio usuário na tela de usuários
-- Contexto Usuario/Login ficou mt confuso na app. Mas acabou ficou custoso pra refatorar.
+- Contexto Usuario/Login ficou mt confuso na app. Mas acabou que ficou custoso pra refatorar.
 - Criação da camada de Application no backend. Modelo de banco de negócio transpaçando pra camada de apresentação.
 - Tratar cadastro de usuários duplicados
 - Customizar campos/tabelas dos identity
