@@ -67,14 +67,18 @@ docker-compose up -d
 - Listar usuários  
 - Excluir usuário  
 
----
-
-## 📌 Melhorias Futuras (Opcional)  
-
-Caso deseje destacar melhorias ou recursos adicionais planejados, você pode adicionar essa seção.  
-
----
-
-## 📄 Licença  
-
-Este projeto foi desenvolvido exclusivamente para o processo seletivo da **Topcon** e não possui uma licença pública.  
+## 📌 Débitos técnicos
+- Estudar arquiteturas de React TS
+- Contextos e Usuario/Login ficaram muito confusos no front e back
+- Conceitos de SOLID no front
+- Estilização dos componentes
+- Sem tratamentos de erros nenhum (Back e Front)
+- Testes automatizados
+- Tratamento para não exclusão do próprio usuário na tela de usuários
+- Contexto Usuario/Login ficou mt confuso na app. Mas acabou ficou custoso pra refatorar.
+- Criação da camada de Application no backend. Modelo de banco de negócio transpaçando pra camada de apresentação.
+- Tratar cadastro de usuários duplicados
+- Customizar campos/tabelas dos identity
+- Utilização de contextApi ou Redux para controle da sessão (token)
+- Abstração de componenes como Loading, Error, etc…
+- Ficou mt “gamb” a inserção do usuário admin padrão. Ficou via entrypoint do postgree no docker-compose.

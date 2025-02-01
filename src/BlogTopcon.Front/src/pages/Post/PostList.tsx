@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Para redirecionamento
 import { PostDto } from '../../types/PostDto';
 import axiosInstance from '../../axiosInstance';
+import { Button,Card, Container } from "react-bootstrap";
+import PostCreate from './PostCreate';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostList: React.FC = () => {
@@ -46,7 +48,7 @@ const PostList: React.FC = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [posts]);
 
   if (loading) {
     return <h2>Carregando...</h2>;
@@ -57,39 +59,54 @@ const PostList: React.FC = () => {
   }
 
   return (
-    <div className="w-75">
-      <button className="btn btn-primary" onClick={() => navigate('/post/create')}>
-        Criar Post
-      </button>
-      {posts.length === 0 ? (
-        <p>Você ainda não possui nenhum post publicado</p>
-      ) : (
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Título</th>
-              <th scope="col">Conteúdo</th>
-              <th scope="col">Criado em</th>
-              <th scope="col">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post) => (
-              <tr key={post.id}>
-                <td>{post.title}</td>
-                <td>{post.content}</td>
-                <td>{post.creationDateFormat}</td>
-                <td>
-                  <i className="bi bi-trash text-danger" style={{ cursor: 'pointer' }} onClick={() => deletePost(post.id!)}></i>
-                  <i className="bi bi-pencil text-warning" style={{ cursor: 'pointer', marginLeft: '10px' }} onClick={() => editPost(post.id!)}></i>
-                  <i className="bi bi-eye text-info" style={{ cursor: 'pointer', marginLeft: '10px' }} onClick={() => viewPost(post.id!)}></i>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+      <Container>
+        <h2 className="mb-4">Posts</h2>
+        <PostCreate/>
+        {posts.length === 0 ? (
+          <p>Você ainda não possui nenhum post publicado</p>
+        ) : (
+              <div className='mt-4'>
+                {posts.map((post) => (
+                  <Card key={post.id} className="mb-4">
+                  <Card.Body>
+                    <div className="d-flex justify-content-between">
+                      <h5>{post.title}</h5>
+                      <small>Criado em: {post.creationDateFormat}</small>
+                    </div>
+                    <div className="mt-3">
+                      <textarea
+                        className="form-control"
+                        value={post.content || ''}
+                        readOnly
+                        disabled
+                        rows={4}
+                      />
+                    </div>
+                    <div className="mt-3">
+                      <Button
+                        variant="danger"
+                        onClick={() => deletePost(post.id!)}
+                        className="me-2"
+                      >
+                        Excluir
+                      </Button>
+                      <Button
+                        variant="warning"
+                        onClick={() => editPost(post.id!)}
+                        className="me-2"
+                      >
+                        Editar
+                      </Button>
+                      <Button variant="info" onClick={() => viewPost(post.id!)}>
+                        Visualizar
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+                ))}
+              </div>
+        )}
+      </Container>
   );
 };
 

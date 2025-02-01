@@ -15,8 +15,10 @@
     "bootstrap-icons": "^1.11.3",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.9",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.15.0"
+    "react-router-bootstrap": "^0.26.3",
+    "react-router-dom": "^7.1.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

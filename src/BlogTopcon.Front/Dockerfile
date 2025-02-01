@@ -21,6 +21,7 @@ FROM nginx:stable-alpine
 
 # Copia os arquivos do build do React para o diretório de servição do Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expõe a porta 3000 para acesso ao frontend
 EXPOSE 80

@@ -1,61 +1,27 @@
-// src/components/MenuLateral.tsx
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { PropsToken } from '../types/PropsToken';
+import { Nav } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 
-// Tipagem para os itens do menu
-type MenuItem = 'post' | 'usuarios';
-
-const MenuLateral: React.FC<PropsToken> = ({ setToken, isAdmin }) => {
-  // Estado para armazenar a última opção selecionada
-  const [selectedItem, setSelectedItem] = useState<MenuItem>(() => {
-    // Lê do localStorage se houver, senão usa 'home' por padrão
-    return (localStorage.getItem('selectedMenuItem') as MenuItem) || 'post';
-  });
-
-  // Atualiza o localStorage toda vez que o item do menu for alterado
-  const handleSelectItem = (item: MenuItem) => {
-    setSelectedItem(item);
-    localStorage.setItem('selectedMenuItem', item); // Salva a última seleção
-  };
-
+const MenuLateral: React.FC<PropsToken> = ({ setToken, isAdmin, nomeUser }) => {
   const handleLogout = () => {
     setToken(null);
   };
 
   return (
-    <div className="sidebar">
-      <div className="d-flex flex-column p-3">
+    <div className="d-flex flex-column vh-100 bg-light p-3 border-end">
         <h3>Menu</h3>
-        <nav>
-          <ul className="nav flex-column">
-            <li className="nav-item">
-              <Link
-                to="/post/list"
-                className={`nav-link ${selectedItem === 'post' ? 'active' : ''}`}
-                onClick={() => handleSelectItem('post')}
-              >
-                Posts
-              </Link>
-            </li>
-            {isAdmin == "true" &&
-              <li className="nav-item">
-                <Link
-                  to="/usuario/list"
-                  className={`nav-link ${selectedItem === 'usuarios' ? 'active' : ''}`}
-                  onClick={() => handleSelectItem('usuarios')}
-                >
-                  Usuários
-                </Link>
-              </li>
-            }
-          </ul>
-          <div>
-                <button onClick={handleLogout}>Logout</button>
-          </div>
-        </nav>
-      </div>
-    </div>
+        <Nav className="flex-column">
+          <Nav.Link as={NavLink} to="/post/list">
+            📝 Posts
+          </Nav.Link>
+          {isAdmin == "true" &&
+            <Nav.Link as={NavLink} to="/usuario/list">
+              👥 Usuários
+            </Nav.Link>
+          }
+          <Nav.Link onClick={handleLogout}>🚪 Sair ({nomeUser})</Nav.Link>
+        </Nav>
+    </div> 
   );
 };
 

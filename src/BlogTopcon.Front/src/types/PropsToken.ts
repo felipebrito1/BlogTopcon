@@ -3,4 +3,5 @@ export interface PropsToken {
     setToken: (token: string|null) => void;
     isAdmin: string;
     setIsAdmin: (isAdmin: string) => void;
+    nomeUser: string;
   }

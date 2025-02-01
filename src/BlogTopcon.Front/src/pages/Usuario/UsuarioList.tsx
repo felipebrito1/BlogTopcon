@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../axiosInstance";
 import { UserDto } from "../../types/UserDto";
+import { Container } from "react-bootstrap";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 // src/pages/Usuario.tsx
@@ -10,7 +10,6 @@ const UsuarioList: React.FC = () => {
   const [users, setUsers] = useState<UserDto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate(); // Hook para redirecionamento
 
   // Função para buscar os users da API
   const fetchusers = async () => {
@@ -47,38 +46,36 @@ const UsuarioList: React.FC = () => {
   }
 
   return (
-    <div className="w-75">
-      {/* <button className="btn btn-primary" onClick={() => navigate('/user/create')}>
-        Criar Usuário
-      </button> */}
-      {users.length === 0 ? (
-        <p>Não existem usuários cadastrados</p>
-      ) : (
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Login</th>
-              <th scope="col">Admin?</th>
-              <th scope="col">Criado em</th>
-              <th scope="col">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.isAdminFormat}</td>
-                <td>{user.creationDateFormat}</td>
-                <td>
-                  <i className="bi bi-trash text-danger" style={{ cursor: 'pointer' }} onClick={() => deleteuser(user.id!)}></i>
-                </td>
+      <Container>
+        <h2 className="mb-4">Usuários</h2>
+        {users.length === 0 ? (
+          <p>Não existem usuários cadastrados</p>
+        ) : (
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Login</th>
+                <th scope="col">Admin?</th>
+                <th scope="col">Criado em</th>
+                <th scope="col">Ações</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
-  );
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  <td>{user.isAdminFormat}</td>
+                  <td>{user.creationDateFormat}</td>
+                  <td>
+                    <i className="bi bi-trash text-danger" style={{ cursor: 'pointer' }} onClick={() => deleteuser(user.id!)}></i>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Container>
+    );
   };
   
   export default UsuarioList;

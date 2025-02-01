@@ -1,7 +1,8 @@
-// LoginAuth.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Button, Form, Container, Row, Col, Alert, Spinner, ButtonGroup } from 'react-bootstrap';
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const LoginAuth: React.FC = () => {
@@ -18,10 +19,9 @@ const LoginAuth: React.FC = () => {
       setLoading(true);
       const response = await axios.post(`${apiUrl}/usuario`, { user, password });
       if (response.status === 200) {
-        setSuccess("Usuario criado com sucesso.")
+        setSuccess("Usuário criado com sucesso.");
       }
     } catch (err) {
-      debugger;
       setError('Credenciais inválidas');
     }
     finally {
@@ -30,42 +30,76 @@ const LoginAuth: React.FC = () => {
   };
 
   if (loading) {
-    return <h2>Carregando...</h2>;
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+        <Spinner animation="border" variant="primary" />
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h2>Login</h2>
-      {!success &&
-        <>
-          <div>
-            <input
-              type="text"
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              placeholder="Digite seu usuário"
-            />
-          </div>
-          <div>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite sua senha"
-            />
-          </div>
-        </>
-       }
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      {success && <div style={{ color: 'green' }}>{success}</div>}
-      {!success && 
-        <>
-          <button onClick={() => navigate('/login')}>Voltar</button>
-          <button onClick={handleLoginRegister}>Cadastrar</button>
-        </>
-      }
-      {success && <button onClick={() => navigate('/login')}>Ir para login</button>}
-    </div>
+    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+      <Row className="w-100">
+        <Col md={6} lg={4} className="mx-auto">
+          <h2 className="text-center mb-4">Criar usuário</h2>
+
+          {/* Formulário de Cadastro */}
+          {!success && 
+            <Form>
+              {/* Campo de Usuário */}
+              <Form.Group>
+                <Form.Label>Usuário</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={user}
+                  onChange={(e) => setUser(e.target.value)}
+                  placeholder="Digite seu usuário"
+                  required
+                />
+              </Form.Group>
+
+              {/* Campo de Senha */}
+              <Form.Group>
+                <Form.Label>Senha</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Digite sua senha"
+                  required
+                />
+              </Form.Group>            
+
+              {/* Botões */}
+              <div className="d-flex justify-content-center mt-4">
+                <ButtonGroup>
+                  <Button variant="link" onClick={() => navigate('/login')}>
+                    Voltar
+                  </Button>
+                  <Button variant="primary" onClick={handleLoginRegister}>
+                    Cadastrar
+                  </Button>
+                </ButtonGroup>
+              </div>
+
+
+            </Form>
+          } 
+          {/* Exibição de Erro ou Sucesso */}
+          <Row className='mt-4'>
+              {error && <Alert variant="danger">{error}</Alert>}
+              {success && <Alert variant="success">{success}</Alert>}
+          </Row>
+          {success && 
+          <Row className='mt-4'>
+            <Button variant="primary" onClick={() => navigate('/login')}>
+              Ir para Login
+            </Button>
+          </Row>
+          }
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

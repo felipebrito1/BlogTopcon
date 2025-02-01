@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PostDto } from '../../types/PostDto';
 import axiosInstance from '../../axiosInstance';
+import { Button, ButtonGroup, Container, Form } from 'react-bootstrap';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const PostEdit: React.FC = () => {
@@ -30,7 +31,10 @@ const PostEdit: React.FC = () => {
 
   // Função para enviar os dados atualizados para a API
   const savePost = async () => {
-    if (!post) return;
+    if (!post || !post.title || !post.content) {
+      setError('Título e Conteúdo são obrigatórios.');
+      return;
+    }
 
     try {
       await axiosInstance.put(`${apiUrl}/Post/${post.id}`, post);
@@ -49,63 +53,52 @@ const PostEdit: React.FC = () => {
     return <h2>Carregando...</h2>;
   }
 
-  if (error) {
-    return <h2>Erro: {error}</h2>;
-  }
-
   return (
-    <div className="w-50">
-      <h1>Editar Post</h1>
-      <form>
-        <div className="mb-3">
-          <label htmlFor="title" className="form-label">
-            Título
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="title"
-            value={post.title || ''}
-            onChange={(e) => setPost({ ...post, title: e.target.value })}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="content" className="form-label">
-            Conteúdo
-          </label>
-          <textarea
-            className="form-control"
-            id="content"
-            rows={3}
-            value={post.content || ''}
-            onChange={(e) => setPost({ ...post, content: e.target.value })}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="creationDate" className="form-label">
-            Criado em
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="creationDate"
-            value={post.creationDateFormat || ''}
-            disabled
-          />
-        </div>
-
-        <div className="d-flex justify-content-between">
-          <button type="button" className="btn btn-secondary" onClick={cancelEdit}>
+    <Container fluid>
+      <h2 className="mb-4">Editar Post</h2>
+      <Form>
+        <Form.Group>
+          <Form.Label>Título</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={post.title || ''}
+                  onChange={(e) => setPost({ ...post, title: e.target.value })}
+                  required
+                />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Conteúdo</Form.Label>
+          <Form.Control
+                  as="textarea"
+                  type="text"
+                  id="content"
+                  rows={3}
+                  value={post.content || ''}
+                  onChange={(e) => setPost({ ...post, content: e.target.value })}
+                  required
+                />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Criado em</Form.Label>
+          <Form.Control
+                  type="text"
+                  value={post.creationDateFormat || ''}
+                  disabled
+                />
+        </Form.Group>
+      </Form>
+      {error && <div className="alert alert-danger mt-4">{error}</div>}
+      <div className="d-flex justify-content-left mt-4">
+        <ButtonGroup>
+          <Button variant="secondary" onClick={cancelEdit}>
             Cancelar
-          </button>
-          <button type="button" className="btn btn-primary" onClick={savePost}>
+          </Button>
+          <Button variant="primary" onClick={savePost}>
             Salvar
-          </button>
-        </div>
-      </form>
-    </div>
+          </Button>
+        </ButtonGroup>
+      </div>
+    </Container>
   );
 };
 

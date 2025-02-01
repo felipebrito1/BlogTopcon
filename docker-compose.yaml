@@ -42,23 +42,23 @@ services:
       - ./init-scripts:/init-scripts
     command: ["sh", "-c", "sleep 10 && PGPASSWORD=${POSTGRES_PASSWORD} psql -h postgres -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /init-scripts/init.sql"]
 
+
+  frontend:
+    container_name: blogtopcon_frontend
+    build:
+      context: ./src/BlogTopcon.Front # Caminho para o projeto React
+      dockerfile: Dockerfile # Nome do Dockerfile do frontend
+    ports:
+      - "3000:80" # Porta do React no host para acessar no navegador
+    volumes:
+      - ./src/BlogTopcon.Front:/app # Sincroniza o código local com o contêiner
+      - /app/node_modules # Evita conflitos de dependências
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Para hot-reload funcionar corretamente no Docker
+    stdin_open: true
+    tty: true
+    depends_on:
+      - api # Aguarda a API estar disponível antes de subir o frontend
+
 volumes:
   postgres_data:
-
-  # frontend:
-  #   container_name: blogtopcon_frontend
-  #   build:
-  #     context: ./src/BlogTopcon.Front # Caminho para o projeto React
-  #     dockerfile: Dockerfile # Nome do Dockerfile do frontend
-  #   ports:
-  #     - "3000:80" # Porta do React no host para acessar no navegador
-  #   volumes:
-  #     - ./src/BlogTopcon.Front:/app # Sincroniza o código local com o contêiner
-  #     - /app/node_modules # Evita conflitos de dependências
-  #   environment:
-  #     - CHOKIDAR_USEPOLLING=true # Para hot-reload funcionar corretamente no Docker
-  #   stdin_open: true
-  #   tty: true
-  #   depends_on:
-  #     - api # Aguarda a API estar disponível antes de subir o frontend
-
