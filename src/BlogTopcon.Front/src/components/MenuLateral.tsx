@@ -12,7 +12,7 @@ const MenuLateral: React.FC<PropsToken> = ({ setToken, isAdmin, nomeUser }) => {
         <h3>Menu</h3>
         <Nav className="flex-column">
           <Nav.Link as={NavLink} to="/post/list">
-            📝 Posts
+            📝 Publicações
           </Nav.Link>
           {isAdmin == "true" &&
             <Nav.Link as={NavLink} to="/usuario/list">

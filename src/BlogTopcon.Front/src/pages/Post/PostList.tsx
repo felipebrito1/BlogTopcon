@@ -3,15 +3,30 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Para redirecionamento
 import { PostDto } from '../../types/PostDto';
 import axiosInstance from '../../axiosInstance';
-import { Button,Card, Container } from "react-bootstrap";
-import PostCreate from './PostCreate';
+import { Button,ButtonGroup,Card, Container, Form } from "react-bootstrap";
 const apiUrl = import.meta.env.VITE_API_URL;
+
+class PostCreateDto implements PostDto {
+  id: string | null;
+  title: string | null;
+  content: string | null;
+  creationDateFormat: string | null;
+  constructor(    
+  ) {
+    this.id = null;
+    this.title = '';
+    this.content = '';
+    this.creationDateFormat = null;
+  }
+}
 
 const PostList: React.FC = () => {
   // Estado para armazenar os posts
   const [posts, setPosts] = useState<PostDto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorCreate, setErrorCreate] = useState<string | null>(null);
+  const [post, setPost] = useState<PostDto>(new PostCreateDto());
   const navigate = useNavigate(); // Hook para redirecionamento
 
   // Função para buscar os posts da API
@@ -30,10 +45,34 @@ const PostList: React.FC = () => {
   const deletePost = async (id: string) => {
     try {
       await axiosInstance.delete(`${apiUrl}/Post/${id}`);
-      setPosts(posts.filter(post => post.id !== id)); // Remove o post da lista local
+      const response = await axiosInstance.get<PostDto[]>(`${apiUrl}/Post`);
+      setPosts(response.data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado ao deletar o post');
     }
+  };
+
+  // Função para salvar o novo post
+  const savePost = async () => {
+    if (!post.title || !post.content) {
+      setErrorCreate('Título e Conteúdo são obrigatórios.');
+      return;
+    }
+
+    try {
+      await axiosInstance.post(`${apiUrl}/Post`, post);
+      const response = await axiosInstance.get<PostDto[]>(`${apiUrl}/Post`);
+      setPosts(response.data);
+      limparForm();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Um erro ocorou ao salvar o post');
+    }
+  };
+
+  // Função para cancelar a criação e voltar para a tela anterior
+  const limparForm = () => {
+    setPost(new PostCreateDto());
+    setErrorCreate(null);
   };
 
   // Função para navegar para a página de edição de post
@@ -48,7 +87,7 @@ const PostList: React.FC = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, [posts]);
+  }, []);
 
   if (loading) {
     return <h2>Carregando...</h2>;
@@ -60,10 +99,48 @@ const PostList: React.FC = () => {
 
   return (
       <Container>
-        <h2 className="mb-4">Posts</h2>
-        <PostCreate/>
+        <h2 className="mb-4">Minhas publicações</h2>
+        <Form>
+          <Form.Group>
+            <Form.Label>Título</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={post.title || ''}
+                      onChange={(e) => setPost({ ...post, title: e.target.value })}
+                      required
+                    />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Conteúdo</Form.Label>
+              <Form.Control
+                      as="textarea"
+                      type="text"
+                      id="content"
+                      rows={3}
+                      value={post.content || ''}
+                      onChange={(e) => setPost({ ...post, content: e.target.value })}
+                      required
+                    />
+            </Form.Group>
+        </Form>
+        {errorCreate && <div className="alert alert-danger mt-4">{errorCreate}</div>}
+        <div className="d-flex justify-content-center mt-4">
+          <ButtonGroup>
+            <Button variant="secondary" onClick={limparForm}>
+              Limpar
+            </Button>
+            <Button variant="primary" onClick={savePost}>
+            Publicar
+            </Button>
+          </ButtonGroup>
+        </div>
+
         {posts.length === 0 ? (
-          <p>Você ainda não possui nenhum post publicado</p>
+          <Card className="mt-4 mb-4">
+            <Card.Body className='d-flex justify-content-center'>
+              <p>Você ainda não possui nenhuma publicação</p>
+            </Card.Body>
+          </Card>
         ) : (
               <div className='mt-4'>
                 {posts.map((post) => (

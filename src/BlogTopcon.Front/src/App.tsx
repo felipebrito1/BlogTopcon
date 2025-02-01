@@ -4,7 +4,6 @@ import MenuLateral from './components/MenuLateral';
 import PostList from './pages/Post/PostList';
 import PostDetail from './pages/Post/PostDetail';
 import PostEdit from './pages/Post/PostEdit';
-import PostCreate from './pages/Post/PostCreate';
 import LoginAuth from './pages/Login/LoginAuth';
 import Autenticacao from './components/Autenticacao';
 import LoginCreate from './pages/Login/LoginCreate';
@@ -46,12 +45,11 @@ const App: React.FC = () => {
             <Col>
               <Routes>
                 <Route path="/login" element={<LoginAuth token={token} setToken={setToken} setIsAdmin={setIsAdmin} isAdmin={isAdmin} nomeUser={nomeUser} />} />
-                <Route path="/createLogin" element={<LoginCreate />} />
+                <Route path="/login/create" element={<LoginCreate />} />
                 <Route path="/" element={<Autenticacao token={token} setToken={setToken} setIsAdmin={setIsAdmin} isAdmin={isAdmin} nomeUser={nomeUser} />}>
                   <Route path="/post/list" element={<PostList />} />
                   <Route path="/post/edit/:id" element={<PostEdit />} />
                   <Route path="/post/detail/:id" element={<PostDetail />} />
-                  <Route path="/post/create" element={<PostCreate />} />
                   {isAdmin === 'true' && <Route path="/usuario/list" element={<UsuarioList />} />}
                 </Route>
               </Routes>

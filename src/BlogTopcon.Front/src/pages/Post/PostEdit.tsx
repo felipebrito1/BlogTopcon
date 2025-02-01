@@ -55,7 +55,7 @@ const PostEdit: React.FC = () => {
 
   return (
     <Container fluid>
-      <h2 className="mb-4">Editar Post</h2>
+      <h2 className="mb-4">Editar Publicação</h2>
       <Form>
         <Form.Group>
           <Form.Label>Título</Form.Label>

@@ -45,7 +45,7 @@ const LoginAuth: React.FC = () => {
 
           {/* Formulário de Cadastro */}
           {!success && 
-            <Form>
+            <Form onKeyDown={(event) => event.key === 'Enter' && handleLoginRegister()}>
               {/* Campo de Usuário */}
               <Form.Group>
                 <Form.Label>Usuário</Form.Label>
@@ -73,7 +73,7 @@ const LoginAuth: React.FC = () => {
               {/* Botões */}
               <div className="d-flex justify-content-center mt-4">
                 <ButtonGroup>
-                  <Button variant="link" onClick={() => navigate('/login')}>
+                  <Button variant="secondary" onClick={() => navigate('/login')}>
                     Voltar
                   </Button>
                   <Button variant="primary" onClick={handleLoginRegister}>

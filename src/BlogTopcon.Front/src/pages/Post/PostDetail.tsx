@@ -44,7 +44,7 @@ const PostDetail: React.FC = () => {
   
     return (
       <Container fluid>
-      <h2 className="mb-4">Editar Post</h2>
+      <h2 className="mb-4">Editar Publicação</h2>
       <Form>
         <Form.Group>
           <Form.Label>Título</Form.Label>
@@ -78,7 +78,7 @@ const PostDetail: React.FC = () => {
       <div className="d-flex justify-content-left mt-4">
         <ButtonGroup>
           <Button variant="secondary" onClick={cancelDetails}>
-            Cancelar
+            Voltar
           </Button>
         </ButtonGroup>
       </div>

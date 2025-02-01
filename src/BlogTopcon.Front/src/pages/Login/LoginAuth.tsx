@@ -73,7 +73,7 @@ const LoginAuth: React.FC<PropsToken> = ({ setToken }) => {
             {/* Botões */}
             <div className="d-flex justify-content-center mt-4">
               <ButtonGroup>
-                <Button variant="link" onClick={() => navigate('/createLogin')}>
+                <Button variant="link" onClick={() => navigate('/login/create')}>
                   Não tenho cadastro
                 </Button>
                 <Button variant="primary" onClick={handleLogin}>
